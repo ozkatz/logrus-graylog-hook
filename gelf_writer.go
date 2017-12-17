@@ -26,7 +26,7 @@ import (
 type Writer struct {
 	mu               sync.Mutex
 	conn             net.Conn
-	hostname         string
+	Hostname         string
 	Facility         string // defaults to current process name
 	CompressionLevel int    // one of the consts from compress/flate
 	CompressionType  CompressType
@@ -96,7 +96,7 @@ func NewWriter(addr string) (*Writer, error) {
 	if w.conn, err = net.Dial("udp", addr); err != nil {
 		return nil, err
 	}
-	if w.hostname, err = os.Hostname(); err != nil {
+	if w.Hostname, err = os.Hostname(); err != nil {
 		return nil, err
 	}
 
@@ -259,7 +259,7 @@ func (w *Writer) Write(p []byte) (n int, err error) {
 
 	m := Message{
 		Version:  "1.0",
-		Host:     w.hostname,
+		Host:     w.Hostname,
 		Short:    string(short),
 		Full:     string(full),
 		TimeUnix: float64(time.Now().UnixNano()/1000000) / 1000.,
